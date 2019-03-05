@@ -1,14 +1,16 @@
 // http://player.radiomeuh.com/rtdata/tracks10.xml
 
 const express = require('express');
+const serverless = require('serverless-http')
 var cheerio = require('cheerio');
 var request = require('request');
 const app = express();
 const port = 3000;
-const router = express.Router();
 var tracks = [];
 const regex = new RegExp('^([0-1][0-9]|[2][0-3]):([0-5][0-9])', 'g');
 const meuhRL = 'http://player.radiomeuh.com/rtdata/tracks10.xml';
+
+const router = express.Router();
 
 const getTracks = (cb) => {
   request(
@@ -96,3 +98,6 @@ router.get('/', function(req, res) {
   
   app.listen(port, () => console.log(`Example app listening on port ${port}!`));
   app.use('/', router);
+
+  module.exports = app
+  module.exports.handler = serverless(app)
